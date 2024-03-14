@@ -10,21 +10,24 @@ Arguments the balance of civilziations are ongoing, and with every patch, the de
 
 
 #### 📝The approach For a Solution
-With the start of each season, all players' ranked ladder title and ratings from the previous season are cleared to zero. Meaning analyzing season 5 (6-16-23 to 11-14-23) match and player data can provide us with very valuable insights into the balancing of the game and give an idea of what the current season 6 might look like. With visualization inspiration from [AOE4 WORLD](https://aoe4world.com/), I will do a deep dive into these categories:
-- Player distribution in ladder rank title/points
-- Player winrates by rank title/points
-- Player winrates by maps
-- Civilization winrates in ladder rank title/points
-- Civilization overall matchup winrates
-- Civilization winrates by maps
+With the start of each season, all players' ranked ladder title and ratings from the previous season are cleared to zero. Meaning analyzing season 5 (6-16-23 to 11-14-23) and season 6 (11-14-23 to 3-20-24) match and player data can provide us with very valuable insights into the balancing of the game and give an idea of what the current season 7 might look like. With visualization inspiration from [AOE4 WORLD](https://aoe4world.com/), I will do a deep dive into these categories for both seasons:
+- Player distribution in solo queue by rank title/points    
+- Player win rates in solo queue by rank title/points    
+- Civilization win rates in ranked 1v1 by rank title/points    
+- Civilization overall matchup win rates in 1v1 ranked    
+- Civilization win rates in 1v1 ranked by maps     
+- Civilization pick rate in 1v1 ranked by rank title/points     
+- Average Game duration in 1v1 ranked by rank title/points    
+
 
 
 ## 🎮Data Source:
-1. Season 5 JSON 1v1 ranked game data on [AOE4 WORLD DATA DUMP!](https://aoe4world.com/dumps)   
-   - Contains every ranked 1v1 ladder game played in season 5 with data on time of matches, players, maps, civilizations, and other relevant information.
-2. Data scraped: season 5 player ratings and rankings
+1. Season 5-6 JSON 1v1 ranked game data on [AOE4 WORLD DATA DUMP!](https://aoe4world.com/dumps)   
+   - Contains every ranked 1v1 ladder game played in season 5-6 with data on time of matches, players, maps, civilizations, and other relevant information.
+2. Data scraped: season 5-6 player ratings and rankings
    - Season 5 leaderboards scraped from [AOE4 WORLD SEASON 5 LEADERBOARDS](https://aoe4world.com/leaderboard/rm_solo?season=5)
-   - Contains information on all ranked players' placement and summary of stats at the end of season 5
+   - Season 6 leaderboards scraped from [AOE4 WORLD SEASON 6 LEADERBOARDS]()
+   - Contains information on all ranked players' placement and summary of stats at the end of season 5 and season 6
 
 
 ## 🔨Tools:
