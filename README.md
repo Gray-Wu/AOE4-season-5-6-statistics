@@ -26,18 +26,18 @@ With the start of each season, all players' ranked ladder title and ratings from
    - Contains every ranked 1v1 ladder game played in season 5-6 with data on time of matches, players, maps, civilizations, and other relevant information.
 2. Data scraped: season 5-6 player ratings and rankings
    - Season 5 leaderboards scraped from [AOE4 WORLD SEASON 5 LEADERBOARDS](https://aoe4world.com/leaderboard/rm_solo?season=5)
-   - Season 6 leaderboards scraped from [AOE4 WORLD SEASON 6 LEADERBOARDS]()
-   - Contains information on all ranked players' placement and summary of stats at the end of season 5 and season 6
+   - Season 6 leaderboards scraped from [AOE4 WORLD SEASON 6 LEADERBOARDS](https://aoe4world.com/leaderboard/rm_solo?season=6)
+   - Contains information on all ranked players' placement and summary of stats at the end of season 5 and season 6 before reset
 
 
 ## 🔨Tools:
-- R for data scraping, preparing, cleaning, analysis, and trend discovery
-- Tableau for dashboards and visualizations
+- R for data scraping, preparing, cleaning, analyzing, and discovering trends
+- Tableau for dashboard creation and visualizations
 
 ### Data Preperation & Cleaning
 The JSON files from AOE4 World contained a lot of nested lists. Turning the files into dataframes were easy however some columns had 3 layers of nested dictionaries which required extraction and seperation.    
 
-The following is the process of turning layers of nested dictionaries into a readable dataframe to export to a csv for analysis
+The following is the process of turning layers of nested dictionaries (season 5 & 6 JSON files) into a readable dataframe and renaming/reordering for analysis.
 ```R
 #install.packages("rjson")
 library("rjson")
@@ -93,9 +93,12 @@ RM_1v1_s5 = unnest(RM_1v1_s5)
 #export out to csv
 write_csv(RM_1v1_s5,"C:\\Users\\gwu\\Desktop\\GA DataA\\R-Project files\\AOE 4\\Cleaned RM 1v1 CSV Files\\AOE4_RM_1v1_s5.csv")
 ```
-Unused columns were dopped, like patch and kind, season 5 is all one patch with every in this data set as ranked match 1v1.
+Unused columns were dopped, like "patch" and "kind", every game in both datasets were ranked 1v1
 
-The data sets were check for missing values and relevance (within the time frame of the season)
+The data sets were validated for games within the range of the seasons, and checked for inconsistent/missing values.
+
+**add in season 6 JSON ranked 1v1 data when AOE4 WORLD releases it**
+
 
 Columns are renamed and ordered for ease of use
 
