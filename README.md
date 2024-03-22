@@ -155,8 +155,9 @@ See [AOE4 S5 & S6 Dashboard]()
 ```R
 all = read.csv("C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\AOE4 S5 1V1 RANKED DATA.csv")
 
-#Win rate of each civilization for each rank group
+##Win and pick rate of each civilization for each rank group
 
+#win rate
 civ_winrate = all |>
   pivot_longer(matches("^p\\d"),
                names_pattern = "(p\\d).(.*)", names_to = c("player", ".value")) |>
@@ -165,6 +166,22 @@ civ_winrate = all |>
 
 write.csv(civ_winrate, file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIV WINRATE BY RANK.CSV")
 
-#Civilization pick rate for each rank group
+#pick rate
+
+all_long <- all %>%
+  pivot_longer(matches("^p\\d"),
+               names_pattern = "(p\\d).(.*)", names_to = c("player", ".value"))
+
+#pick count for each civ in each rank group
+civ_pick_counts <- all_long %>%
+  group_by(rank.group, civ) %>%
+  summarize(pick_count = sum(!is.na(civ)), .groups = "drop")
+
+civ_pickrate <- (civ_pick_counts %>%
+  group_by(rank.group) %>%
+  mutate(total_picks = sum(pick_count)) %>%
+  ungroup()) %>% mutate(pick_rate = pick_count / total_picks)
+
+write.csv(civ_pickrate, file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIV PICKRATE BY RANK.CSV")
 
 ```
