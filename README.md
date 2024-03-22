@@ -37,7 +37,7 @@ With the start of each season, all players' ranked ladder title and ratings from
 ### Data Preperation & Cleaning
 The JSON files from AOE4 World contained a lot of nested lists. Turning the files into dataframes were easy however some columns had 3 layers of nested dictionaries which required extraction and seperation.    
 
-The following is the process of turning layers of nested dictionaries (season 5 & 6 JSON files) into a readable dataframe and renaming/reordering for analysis.
+#### The following is the process of turning layers of nested dictionaries (season 5 & 6 JSON files) into a readable dataframe and renaming/reordering for analysis.
 ```R
 #install.packages("rjson")
 library("rjson")
@@ -99,8 +99,72 @@ The data sets were validated for games within the range of the seasons, and chec
 
 **add in season 6 JSON ranked 1v1 data when AOE4 WORLD releases it**
 
+#### Merging player leader boards data with match data to get one big dataframe, validating and then renaming columns for organization
+
+```R
+#read data
+match = read.csv("C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Cleaned RM 1v1 CSVs\\AOE4_RM_1v1_s5.csv")
+lb = read.csv("C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Raw Leaderboard Excel Files\\leadersboards_rm_solo_points_s5.csv.gzip.csv")
+
+#drop mmr columns because missing values
+match = subset(match, select = -c(p1.mmr, p1.mmr.dif, p2.mmr, p2.mmr.dif))
+
+#Season 5 solo queue player win rates by rank title/points
+lb$winrate = (lb$wins_count/lb$games_count)*100 #calculate win rate
+lb$group = sub("\\_.*","",lb$rank_level) #group general rank levels
+
+#display the winning civilization of each match
+match$civ.won <- ifelse(match$p1.result == "win", match$p1.civ, match$p2.civ)
+
+
+##find out each civilization pick and win rate by rank groups
+#separate p1 and p2 match data because need to merge by profile ID and each row has both players' ID
+p1_match = subset(match, select = c(game_id,duration,map,p1.ID,p1.result,p1.civ,civ.won))
+p2_match = subset(match, select = c(game_id,duration,map,p2.ID,p2.result,p2.civ,civ.won))
+
+#merge matches with each player information from leader boards (lb)
+p1_match_lb = merge(p1_match,lb, by.x = 'p1.ID', by.y = 'profile_id')
+p2_match_lb = merge(p2_match,lb, by.x = 'p2.ID', by.y = 'profile_id')
+
+#merge both dfs by game id, now have player rank info and match info in one df.
+all = merge(p1_match_lb,p2_match_lb, by = 'game_id')
+
+#clean and organize naming/ordering
+all = subset(all, select = c(game_id,duration.x,map.x,name.x,p1.result,p1.civ,rank.x,
+                             rating.x,group.x,games_count.x,winrate.x,name.y,
+                             p2.result,p2.civ,rank.y,rating.y,group.y,games_count.y,
+                             winrate.y, civ.won.x)) %>% rename(
+                               game.id = game_id,duration.sec = duration.x, map = map.x, p1.name = name.x,
+                               p1.rank = rank.x, p1.rating = rating.x, p1.rank.group = group.x,
+                               p1.games.count = games_count.x, p1.winrate = winrate.x,
+                               p2.name = name.y, p2.rank = rank.y, p2.rating = rating.y,
+                               p2.rank.group = group.y, p2.games.count = games_count.y,
+                               p2.winrate = winrate.y, civ.won = civ.won.x
+                             )
+
+write.csv(all,file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\AOE4 S5 1V1 RANKED DATA.csv")
+```
 
 Columns are renamed and ordered for ease of use
 
 ### Data Analysis
+Most statistical analysis was done in R, then exported out to Tableau for visualizations and dashboard creation.   
 
+See [AOE4 S5 & S6 Dashboard]()
+
+```R
+all = read.csv("C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\AOE4 S5 1V1 RANKED DATA.csv")
+
+#Win rate of each civilization for each rank group
+
+civ_winrate = all |>
+  pivot_longer(matches("^p\\d"),
+               names_pattern = "(p\\d).(.*)", names_to = c("player", ".value")) |>
+  summarize(winrate = mean(civ == civ.won), .by = c(rank.group, civ)) |>
+  arrange(desc(rank.group))
+
+write.csv(civ_winrate, file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIV WINRATE BY RANK.CSV")
+
+#Civilization pick rate for each rank group
+
+```
