@@ -1,16 +1,16 @@
 # 🛖AGE OF EMPIRES 4 GAME STATISTICAL ANALYSIS
 
-Age Of Empires 4 is a very complex real-time strategy game set in the middle-ages where players require immense knowledge about many mechanics of the game to perform competitively. At the time of the most recent season, AOE4 has 16 unique civilizations and ~30 maps; each civilization with unique bonuses, units, upgrades, and approaches to gameplay, each map with unique resources, land/sea formations, and a range of geographical difference. 
+Age Of Empires 4 is a complex real-time strategy game set in the middle-ages where players require immense knowledge about many mechanics of the game to perform competitively. At the time of the most recent season (S7), AOE4 has 16 unique civilizations and ~30 maps; each civilization with unique bonuses, units, upgrades, and approaches to gameplay, each map with unique resources, land/sea formations, and a range of geographical difference. 
 
 ## Project Overview
 
 #### ❓The problem
 Parts of the AOE4 community have expressed their concerns about a variety of things: some civilizations are too strong, some maps are overtly advantageous to some civilizations, and some unique upgrades of exclusive units are overpowered. 
-Arguments the balance of civilziations are ongoing, and with every patch, the developers buff or nerf different parts of the game to attmept at making the game more balanced and fair for players. **But with so much emotional biases in ranked play and many game factors to consider, how can we determine if the game really is balanced or not?**
+Arguments the balance of civilziations are ongoing, and with every patch, the developers buff or nerf different parts of the game with the goal to balance the game so it is fair to all players of all levels. **But with so much emotional biases in ranked play and many game factors to consider, how can we determine if the game really is balanced or not?**
 
 
 #### 📝The approach For a Solution
-With the start of each season, all players' ranked ladder title and ratings from the previous season are cleared to zero. Meaning analyzing season 5 (6-16-23 to 11-14-23) and season 6 (11-14-23 to 3-20-24) match and player data can provide us with very valuable insights into the balancing of the game and give an idea of what the current season 7 might look like. With visualization inspiration from [AOE4 WORLD](https://aoe4world.com/), I will do a deep dive into these categories for both seasons:
+With the start of each season, all players' ranked ladder title and ratings from the previous season are cleared to zero. Meaning analyzing season 5 (6-16-23 to 11-14-23) and season 6 (11-14-23 to 3-20-24) match and player data can provide us with very valuable insights into the balancing of the game and give an idea of what the current season 7 might look like. With visualization inspiration from [AOE4 WORLD](https://aoe4world.com/), I will do a deep dive into these categories for seasons 5 and 6 ranked play match data:
 - Player distribution in solo queue by rank title/points    
 - Player win rates in solo queue by rank title/points    
 - Civilization win rates in ranked 1v1 by rank title/points    
@@ -152,6 +152,7 @@ Most statistical analysis was done in R, then exported out to Tableau for visual
 
 See [AOE4 S5 & S6 Dashboard]()
 
+#### Calculating each civilization's win rate and pick rate for each rank group. Calculating each civilization's win rate for each map and for each rank group
 ```R
 all = read.csv("C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\AOE4 S5 1V1 RANKED DATA.csv")
 
@@ -184,4 +185,14 @@ civ_pickrate <- (civ_pick_counts %>%
 
 write.csv(civ_pickrate, file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIV PICKRATE BY RANK.CSV")
 
+##calculate civilization win rates on each map for every rank group
+
+civ_map_winrate <- all %>%
+  pivot_longer(matches("^p\\d"),
+               names_pattern = "(p\\d).(.*)", names_to = c("player", ".value")) %>%
+  group_by(rank.group, civ, map) %>%
+  summarize(winrate = mean(civ == civ.won), .groups = "drop") %>%
+  arrange(desc(rank.group))
+
+write.csv(civ_map_winrate, file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIV WINRATE BY MAP_RANK.CSV")
 ```
