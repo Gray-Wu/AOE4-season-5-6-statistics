@@ -35,9 +35,11 @@ With the start of each season, all players' ranked ladder title and ratings from
 - Tableau for dashboard creation and visualizations
 
 ### Data Preperation & Cleaning
+*Note: Only S5 data cleaning & analysis code will be documented on github, the process for S6 data analysis will be almost identical*   
+
 The JSON files from AOE4 World contained a lot of nested lists. Turning the files into dataframes were easy however some columns had 3 layers of nested dictionaries which required extraction and seperation.    
 
-#### The following is the process of turning layers of nested dictionaries (season 5 & 6 JSON files) into a readable dataframe and renaming/reordering for analysis.
+#### The following is the process of turning layers of nested dictionaries (season 5 JSON files) into a readable dataframe and renaming/reordering for analysis.
 ```R
 #install.packages("rjson")
 library("rjson")
@@ -97,8 +99,6 @@ Unused columns were dopped, like "patch" and "kind", every game in both datasets
 
 The data sets were validated for games within the range of the seasons, and checked for inconsistent/missing values.
 
-**add in season 6 JSON ranked 1v1 data when AOE4 WORLD releases it**
-
 #### Merging player leader boards data with match data to get one big dataframe, validating and then renaming columns for organization
 
 ```R
@@ -152,7 +152,8 @@ Most statistical analysis was done in R, then exported out to Tableau for visual
 
 See [AOE4 S5 & S6 Dashboard]()
 
-#### Calculating each civilization's win rate and pick rate for each rank group. Calculating each civilization's win rate for each map and for each rank group
+#### Calculating each civilization's win rate and pick rate for each rank group.    
+#### Calculating each civilization's win rate for each map and for each rank group
 ```R
 all = read.csv("C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\AOE4 S5 1V1 RANKED DATA.csv")
 
