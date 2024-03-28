@@ -1,4 +1,4 @@
-# 🛖AGE OF EMPIRES 4 GAME STATISTICAL ANALYSIS
+# 🛖AGE OF EMPIRES 4 RANKED STATISTICAL ANALYSIS
 
 Age Of Empires 4 is a complex real-time strategy game set in the middle-ages where players require immense knowledge about many mechanics of the game to perform competitively. At the time of the most recent season (S7), AOE4 has 16 unique civilizations and ~30 maps; each civilization with unique bonuses, units, upgrades, and approaches to gameplay, each map with unique resources, land/sea formations, and a range of geographical difference. 
 
@@ -302,3 +302,60 @@ rownames(civ_winrates_maps) <- NULL
 
 write.csv(civ_winrates_maps, file = "C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIV WINRATES BY MAP_RANK.CSV")
 ```
+
+#### Each civilization match-up
+```R
+## Civilization match up win rates
+df = read.csv('C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 1v1 SAME RANK.CSV')
+
+# Create a function to calculate win rates
+calculate_win_rate <- function(df, civ1, civ2) {
+  # Filter dataframe for the specific matchup
+  matchup_df <- df[(df$p1.civ == civ1 & df$p2.civ == civ2) | (df$p1.civ == civ2 & df$p2.civ == civ1), ]
+  
+  # Calculate win rate
+  win_rate <- sum(matchup_df$civ.won == civ1) / nrow(matchup_df)
+  
+  return(win_rate)
+}
+
+# Get unique civilizations
+unique_civs <- unique(c(df$p1.civ, df$p2.civ))
+
+# Create an empty dataframe to store win rates and game ID counts
+win_rates_df <- data.frame(
+  civilization1 = character(),
+  civilization2 = character(),
+  win_rate = numeric(),
+  game_id_count = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Calculate win rates and game ID counts for each unique matchup
+for (i in 1:length(unique_civs)) {
+  for (j in 1:length(unique_civs)) {
+    civ1 <- unique_civs[i]
+    civ2 <- unique_civs[j]
+    matchup <- paste(civ1, civ2, sep = "-")
+    
+    # Check if the matchup is between the same civilizations
+    if (civ1 == civ2) {
+      # Calculate win rate for the same civilization matchup
+      same_civ_data <- df[(df$p1.civ == civ1 & df$p2.civ == civ2), ]
+      win_rate <- sum(same_civ_data$civ.won == civ1) / nrow(same_civ_data)
+      game_id_count <- nrow(same_civ_data)
+    } else {
+      # Calculate win rate for different civilization matchup
+      matchup_data <- df[(df$p1.civ == civ1 & df$p2.civ == civ2) | (df$p1.civ == civ2 & df$p2.civ == civ1), ]
+      win_rate <- sum(matchup_data$civ.won == civ1) / nrow(matchup_data)
+      game_id_count <- nrow(matchup_data)
+    }
+    
+    # Append to the win_rates_df dataframe
+    win_rates_df <- rbind(win_rates_df, data.frame(civilization1 = civ1, civilization2 = civ2, win_rate = win_rate, game_id_count = game_id_count))
+  }
+}
+
+write.csv(win_rates_df,file = 'C:\\Users\\gwu\\Desktop\\GA DataA\\R Project files\\AOE 4\\Season 5 Analysis\\S5 CIVILIZATION MATCH UP WIN RATES.CSV')
+```
+
