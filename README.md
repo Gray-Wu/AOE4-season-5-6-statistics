@@ -4,8 +4,7 @@ Age Of Empires 4 is a complex real-time strategy game set in the middle-ages whe
 
 ## Project Overview
 - [AOE 4 STATS DASHBOARD ON TABLEAU]()    
-- [JUMP ➡️ TREND ANALYSIS]()    
-- [JUMP ➡️ LINEAR REGRESSION MODEL]()    
+- [JUMP ➡️ TREND ANALYSIS]()        
 
 #### ❓The problem
 Parts of the AOE4 community have expressed their concerns about a variety of things: some civilizations are too strong, some maps are overtly advantageous to some civilizations, and some unique upgrades of exclusive units are overpowered. 
@@ -14,13 +13,11 @@ Arguments the balance of civilziations are ongoing, and with every patch, the de
 
 #### 📝The approach For a Solution
 With the start of each season, all players' ranked ladder title and ratings from the previous season are cleared to zero. Meaning analyzing season 5 (6-16-23 to 11-14-23) and season 6 (11-14-23 to 3-20-24) match and player data can provide us with very valuable insights into the balancing of the game and give an idea of what the current season 7 might look like. With visualization inspiration from [AOE4 WORLD](https://aoe4world.com/), I will do a deep dive into these categories for seasons 5 and 6 ranked play match data:
-- Player distribution in solo queue by rank title/points    
-- Player win rates in solo queue by rank title/points    
+- Player distribution in solo queue by rank title/points        
 - Civilization win rates in ranked 1v1 by rank title/points    
 - Civilization overall matchup win rates in 1v1 ranked    
 - Civilization win rates in 1v1 ranked by maps     
-- Civilization pick rate in 1v1 ranked by rank title/points     
-- Average Game duration in 1v1 ranked by rank title/points    
+- Civilization pick rate in 1v1 ranked by rank title/points         
 
 
 
